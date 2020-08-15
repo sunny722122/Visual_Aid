@@ -55,6 +55,7 @@ const char *password = "nfnb33pgv2";
 
 double distance;
 void startCameraServer();
+String getmatchedname();
 void iniFirebase();
 void send_data_to_firebase();
 void distance_tone();
@@ -103,9 +104,11 @@ void setup()
     config.frame_size = FRAMESIZE_UXGA;
     config.jpeg_quality = 10;
     config.fb_count = 2;
+    Serial.println("psram found");
   }
   else
   {
+    Serial.println("psram not found change configuration");
     config.frame_size = FRAMESIZE_SVGA;
     config.jpeg_quality = 12;
     config.fb_count = 1;
@@ -177,18 +180,28 @@ void inischeduler()
   runner.addTask(t1_firebase);
   runner.addTask(t2_ultratone);
   // Enable the task
-  //t1_firebase.enable();
-  //t2_ultratone.enable();
+  t1_firebase.enable();
+  t2_ultratone.enable();
 }
 
 void loop()
 {
   //put your main code here, to run repeatedly:
-  //runner.execute();
+  runner.execute();
 }
 void send_data_to_firebase()
 {
   Firebase.setDouble(firebaseData, path + "/Distance/Data", distance);
+  if(getmatchedname()!="")
+  {
+    String getname=getmatchedname();
+    Firebase.setString(firebaseData, path + "/Recoganisedname/Data", getname);
+  }
+  else
+  {
+    Firebase.setString(firebaseData, path + "/Recoganisedname/Data", "no data");
+  }
+  
 }
 
 void distance_tone()

@@ -65,6 +65,12 @@ static face_id_list id_list = {0};
 String face_names[10]={};
 static char chararraytoprint[32]={0,};
 static String stringtoprint="";
+int matched_ida=0;
+
+String getmatchedname()
+{
+    return face_names[matched_ida];
+}
 
 static ra_filter_t * ra_filter_init(ra_filter_t * filter, size_t sample_size){
     memset(filter, 0, sizeof(ra_filter_t));
@@ -211,6 +217,7 @@ static int run_face_recognition(dl_matrix3du_t *image_matrix, box_array_t *net_b
     }
 
     dl_matrix3du_free(aligned_face);
+    matched_ida=matched_id;
     return matched_id;
 }
 
