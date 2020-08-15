@@ -80,23 +80,8 @@ void loop() {
    Firebase.setDouble(firebaseData,path+"/Distance/Data",distance);
 
  //ledcWrite(channel, 125);
-    if (distance > 0 && distance <100){
+    if (distance > 0 && distance <400){
     ledcWrite(0, 125);
-    ledcWriteTone(0,2000);
-    delay(1000);
-  }
-  else if (distance >100 && distance <200){
-    //ledcWrite(0, 125);
-    ledcWriteTone(0,2500);
-    delay(1000);
-  }
-  else if (distance >200 && distance <300){
-    //ledcWrite(0, 125);
-    ledcWriteTone(0,3000);
-    delay(1000);
-  }
-  else if (distance >300 && distance <400){
-    //ledcWrite(0, 125);
     ledcWriteTone(0,5000);
     delay(1000);
   }
