@@ -3,6 +3,7 @@
 #include <NewPing.h>
 #include <FirebaseESP32.h>
 #include "esp_camera.h"
+#include "TaskScheduler.h"
 
 #define FIREBASE_HOST "esp32-flutter-project.firebaseio.com"
 #define FIREBASE_AUTH "sMuaV86cJhMXpk3htAaXfk3xkveaZ6CcqrL9tuW3"
@@ -52,8 +53,11 @@ int channel=0;
 uint resolution1=8;
 
 
-const char* ssid = "SHAW-BDF72C";
-const char* password = "Saavi2019";
+const char* ssid = "TELUS1005";
+const char* password = "nfnb33pgv2";
+
+Task t1_firebase(10000, TASK_FOREVER, &send_data_to_firebase);
+Scheduler runner;
 
 void startCameraServer();
 void iniFirebase();
@@ -166,7 +170,7 @@ void loop() {
    Serial.println("cm");
    }
 
-   Firebase.setDouble(firebaseData,path+"/Distance/Data",distance);
+   
 
  //ledcWrite(channel, 125);
     if (distance > 0 && distance <400){
@@ -176,5 +180,10 @@ void loop() {
   }
   else {
      ledcWriteTone(0,0);
+  }
+
+  void send_data_to_firebase()
+  {
+    Firebase.setDouble(firebaseData,path+"/Distance/Data",distance);
   }
 }
