@@ -62,6 +62,9 @@ static int8_t recognition_enabled = 0;
 static int8_t is_enrolling = 0;
 static char person_name[32] = {0,};
 static face_id_list id_list = {0};
+String face_names[10]={};
+static char chararraytoprint[32]={0,};
+static String stringtoprint="";
 
 static ra_filter_t * ra_filter_init(ra_filter_t * filter, size_t sample_size){
     memset(filter, 0, sizeof(ra_filter_t));
@@ -178,10 +181,11 @@ static int run_face_recognition(dl_matrix3du_t *image_matrix, box_array_t *net_b
             if(left_sample_face == (ENROLL_CONFIRM_TIMES - 1)){
                 Serial.printf("Enrolling Face ID: %d\n", id_list.tail);
             }
+            face_names[id_list.tail]=person_name;
             Serial.print(person_name);
             Serial.printf("Enrolling Face ID: %d sample %d\n", id_list.tail, ENROLL_CONFIRM_TIMES - left_sample_face);
-            
-            rgb_printf(image_matrix, FACE_COLOR_CYAN, "Name[%s] ID[%u] Sample[%u]", person_name,id_list.tail, ENROLL_CONFIRM_TIMES - left_sample_face);
+            rgb_printf(image_matrix, FACE_COLOR_CYAN, person_name);
+            //rgb_printf(image_matrix, FACE_COLOR_CYAN, "Name[%s] ID[%u] Sample[%u]", person_name,id_list.tail, ENROLL_CONFIRM_TIMES - left_sample_face);
             if (left_sample_face == 0){
                 is_enrolling = 0;
                 Serial.printf("Enrolled Face ID: %d\n", id_list.tail);
@@ -190,7 +194,11 @@ static int run_face_recognition(dl_matrix3du_t *image_matrix, box_array_t *net_b
             matched_id = recognize_face(&id_list, aligned_face);
             if (matched_id >= 0) {
                 Serial.printf("Match Face ID: %u\n", matched_id);
-                rgb_printf(image_matrix, FACE_COLOR_GREEN, "Hello Subject %u", matched_id);
+                stringtoprint="Hi "+face_names[matched_id]+"...";
+                stringtoprint.toCharArray(chararraytoprint, 32);
+                //rgb_printf(image_matrix, FACE_COLOR_GREEN, "Hello Subject %u", matched_id);
+                rgb_printf(image_matrix, FACE_COLOR_GREEN,chararraytoprint);
+                stringtoprint="";
             } else {
                 Serial.println("No Match Found");
                 rgb_print(image_matrix, FACE_COLOR_RED, "Intruder Alert!");
