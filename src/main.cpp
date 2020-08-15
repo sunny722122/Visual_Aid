@@ -33,8 +33,8 @@ int channel=0;
 uint resolution1=8;
 
 
-const char* ssid = "SHAW-BDF72C";
-const char* password = "Saavi2019";
+const char* ssid = "TELUS1005";
+const char* password = "nfnb33pgv2";
 
 void startCameraServer();
 void iniWifi();
